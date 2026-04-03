@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 import { Eye } from 'lucide-react';
 import AdminLayout from '@/components/AdminLayout';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -29,11 +27,11 @@ const STATUS_OPTIONS = [
   { value: 'REFUNDED', label: 'Refunded' },
 ];
 
-const STATUS_VARIANT = {
-  CREATED: 'secondary',
-  PAID: 'default',
-  FAILED: 'destructive',
-  REFUNDED: 'outline',
+const STATUS_STYLE = {
+  CREATED: 'bg-amber-50 text-amber-700',
+  PAID: 'bg-green-50 text-green-700',
+  FAILED: 'bg-red-50 text-red-700',
+  REFUNDED: 'bg-muted text-muted-foreground',
 };
 
 const STATUS_LABEL = {
@@ -57,7 +55,6 @@ function fmtDate(s) {
 function OrderDetailDialog({ order, open, onClose }) {
   if (!order) return null;
   const rows = [
-    ['Order ID', order.id],
     ['Offering', order.offering?.name],
     ['Amount', fmt(order.amount)],
     ['Status', STATUS_LABEL[order.status] ?? order.status],
@@ -68,26 +65,31 @@ function OrderDetailDialog({ order, open, onClose }) {
     ['Guest Email', order.guestEmail ?? '—'],
     ['Guest Mobile', order.guestMobile ?? '—'],
     ['Special Instructions', order.specialInstructions ?? '—'],
-    ['Razorpay Order ID', order.razorpayOrderId ?? '—'],
-    ['Razorpay Payment ID', order.razorpayPaymentId ?? '—'],
     ['Receipt Sent', order.receiptSent ? 'Yes' : 'No'],
     ['Created At', fmtDate(order.createdAt)],
   ];
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-md backdrop-blur-xl bg-popover/90" style={{ boxShadow: '0 10px 30px -10px rgba(28,25,23,0.12)' }}>
         <DialogHeader>
-          <DialogTitle>Order Details</DialogTitle>
+          <DialogTitle className="text-base font-semibold">Order Details</DialogTitle>
+          <p className="font-mono text-xs text-muted-foreground pt-1">{order.id}</p>
         </DialogHeader>
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm mt-2">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm mt-2">
           {rows.map(([label, value]) => (
             <div key={label} className="contents">
-              <dt className="text-muted-foreground font-medium">{label}</dt>
-              <dd className="break-all">{value}</dd>
+              <dt className="text-muted-foreground text-xs uppercase tracking-wide font-medium">{label}</dt>
+              <dd className="break-all text-sm">{value}</dd>
             </div>
           ))}
         </dl>
+        {order.razorpayPaymentId && (
+          <div className="mt-4 pt-4 border-t border-border/50">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-1.5">Razorpay Payment ID</p>
+            <p className="font-mono text-xs text-foreground">{order.razorpayPaymentId}</p>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
@@ -118,11 +120,14 @@ export default function Orders() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-8 max-w-5xl">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Orders</h1>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Orders</h1>
+            <p className="text-sm text-muted-foreground mt-1">Track devotee seva bookings</p>
+          </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-40 rounded-md bg-card border-border/60 text-sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -134,52 +139,51 @@ export default function Orders() {
         </div>
 
         {loading ? (
-          <div className="text-muted-foreground text-sm">Loading…</div>
+          <div className="text-sm text-muted-foreground">Loading…</div>
         ) : orders.length === 0 ? (
           <p className="text-sm text-muted-foreground">No orders found.</p>
         ) : (
-          <Card>
-            <CardContent className="p-0">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Date</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Devotee</th>
-                    <th className="text-left px-4 py-3 font-medium text-muted-foreground">Offering</th>
-                    <th className="text-right px-4 py-3 font-medium text-muted-foreground">Amount</th>
-                    <th className="text-center px-4 py-3 font-medium text-muted-foreground">Status</th>
-                    <th className="text-right px-4 py-3 font-medium text-muted-foreground"></th>
+          <div className="bg-card rounded-lg overflow-hidden" style={{ boxShadow: '0 10px 30px -10px rgba(28,25,23,0.08)' }}>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted/60">
+                  <th className="text-left px-5 py-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">Date</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">Devotee</th>
+                  <th className="text-left px-5 py-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">Offering</th>
+                  <th className="text-right px-5 py-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">Amount</th>
+                  <th className="text-center px-5 py-3 text-xs font-medium uppercase tracking-widest text-muted-foreground">Status</th>
+                  <th className="px-5 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((o, i) => (
+                  <tr key={o.id} className={i % 2 === 0 ? 'bg-card' : 'bg-muted/20'}>
+                    <td className="px-5 py-3.5 text-muted-foreground text-xs whitespace-nowrap">
+                      {fmtDate(o.createdAt)}
+                    </td>
+                    <td className="px-5 py-3.5 font-medium">{o.devoteeName || o.guestName || '—'}</td>
+                    <td className="px-5 py-3.5 text-muted-foreground">{o.offering?.name ?? '—'}</td>
+                    <td className="px-5 py-3.5 text-right font-semibold">{fmt(o.amount)}</td>
+                    <td className="px-5 py-3.5 text-center">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_STYLE[o.status] ?? 'bg-muted text-muted-foreground'}`}>
+                        {STATUS_LABEL[o.status] ?? o.status}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-right">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-8 rounded-md"
+                        onClick={() => setSelected(o)}
+                      >
+                        <Eye className="size-3.5" />
+                      </Button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {orders.map(o => (
-                    <tr key={o.id} className="border-b last:border-0 hover:bg-muted/30">
-                      <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
-                        {fmtDate(o.createdAt)}
-                      </td>
-                      <td className="px-4 py-3">{o.devoteeName || o.guestName || '—'}</td>
-                      <td className="px-4 py-3">{o.offering?.name ?? '—'}</td>
-                      <td className="px-4 py-3 text-right font-medium">{fmt(o.amount)}</td>
-                      <td className="px-4 py-3 text-center">
-                        <Badge variant={STATUS_VARIANT[o.status] ?? 'secondary'}>
-                          {STATUS_LABEL[o.status] ?? o.status}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setSelected(o)}
-                        >
-                          <Eye className="size-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

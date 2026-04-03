@@ -4,7 +4,6 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function Login() {
   const { login } = useAuth();
@@ -45,16 +44,25 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/40">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Varadanam</CardTitle>
-          <CardDescription>Admin Portal</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="inline-flex size-12 items-center justify-center rounded-xl bg-primary/10 mb-4">
+            <span className="text-primary font-bold text-lg">V</span>
+          </div>
+          <h1 className="text-2xl font-semibold tracking-tight">Varadanam</h1>
+          <p className="text-sm text-muted-foreground mt-1">Sign in to the admin portal</p>
+        </div>
+
+        <div
+          className="bg-card rounded-xl p-8"
+          style={{ boxShadow: '0 10px 30px -10px rgba(28,25,23,0.10)' }}
+        >
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-1.5">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -62,11 +70,14 @@ export default function Login() {
                 autoComplete="email"
                 value={form.email}
                 onChange={handleChange}
+                className="rounded-md bg-background border-border focus:ring-1 focus:ring-primary"
                 required
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
@@ -74,16 +85,23 @@ export default function Login() {
                 autoComplete="current-password"
                 value={form.password}
                 onChange={handleChange}
+                className="rounded-md bg-background border-border focus:ring-1 focus:ring-primary"
                 required
               />
             </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full" disabled={loading}>
+            {error && (
+              <p className="text-xs text-destructive bg-destructive/8 rounded-md px-3 py-2">{error}</p>
+            )}
+            <Button
+              type="submit"
+              className="w-full rounded-md font-medium"
+              disabled={loading}
+            >
               {loading ? 'Signing in…' : 'Sign in'}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
