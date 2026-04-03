@@ -20,7 +20,8 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/login', {
+      const base = import.meta.env.VITE_API_BASE_URL || '/api';
+      const res = await fetch(`${base}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, templeId: import.meta.env.VITE_TEMPLE_ID }),
