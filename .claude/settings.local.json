@@ -3,7 +3,25 @@
     "allow": [
       "Bash(node src/index.js)",
       "Bash(curl -s http://localhost:5000/health)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Read(//Users/sudarshms/Projects/varadanam/varadanam-server/**)",
+      "Bash(npm install:*)",
+      "Read(//Users/sudarshms/Projects/varadanam/varadanam-admin/src/**)",
+      "Bash(xargs cat:*)",
+      "Bash(npx prisma:*)",
+      "Read(//Users/sudarshms/Projects/varadanam/varadanam-user/**)",
+      "Bash(npm run:*)",
+      "Bash(node prisma/seed.js)",
+      "Bash(lsof -ti:3000,5000)",
+      "Bash(xargs kill:*)",
+      "Bash(xargs ps:*)",
+      "WebSearch",
+      "Bash(npx playwright:*)",
+      "Read(//private/tmp/**)",
+      "Bash(gh auth:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh api graphql -f 'query=:*)",
+      "Bash(python3 -c ':*)"
     ]
   }
 }

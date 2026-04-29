@@ -81,14 +81,14 @@ If contrast is insufficient (e.g., a white card on a light grey background), use
 
 ---
 
-## 6. Do’s and Don’ts
+## 6. Do's and Don'ts
 
 ### Do:
 - **Embrace Asymmetry:** Use wide margins for page titles and tighter margins for data grids to create visual interest.
 - **Use "Space as Structure":** If two elements feel cluttered, increase the gap before adding a line.
 - **Contextual Monospacing:** Use JetBrains Mono for anything that could be copied/pasted into a terminal or ledger.
 
-### Don’t:
+### Don't:
 - **Don't use pure black:** Use `#1C1917` for all "dark" elements. It feels more organic and premium.
 - **Don't use standard shadows:** Avoid the default CSS `box-shadow: 0 2px 4px`. It looks "template-like."
 - **Don't over-round:** Stick strictly to the radius scale (6px/8px/10px). Never use fully rounded "pill" buttons unless they are tags or chips.

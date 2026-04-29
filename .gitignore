@@ -36,3 +36,9 @@ logfile
 
 # Backup env files
 **/.env.save
+
+# Sub-repos (each is an independent git repo)
+varadanam-server/
+varadanam-admin/
+varadanam-user/
+varadanam-tests/
